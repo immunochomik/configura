@@ -3,7 +3,7 @@ import os
 from tempfile import gettempdir
 from textwrap import dedent
 
-from configura.configura import Factory, YamlValuesLoader, ip4
+from configura import Factory, YamlValuesLoader, ip4
 
 CONFIG_PATH = os.path.join(gettempdir(), 'config-example.yml')
 

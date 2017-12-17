@@ -4,8 +4,8 @@ from abc import abstractmethod
 
 import yaml
 
-from configura.configura import ConfigItemRequiredException, ConfigItemValidationException
-from configura.configura.factory import ReadOnly
+from configura import ConfigItemRequiredException, ConfigItemValidationException
+from configura.factory import ReadOnly
 
 
 class ValuesLoader(object):

@@ -5,7 +5,7 @@ from unittest import TestCase
 
 import yaml
 
-from configura.configura import Factory, ExpectedItem, DictValuesLoader, \
+from configura import Factory, ExpectedItem, DictValuesLoader, \
     ConfigItemValidationException, ConfigItemRequiredException, YamlValuesLoader, ip4
 
 
