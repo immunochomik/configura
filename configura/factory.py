@@ -44,7 +44,7 @@ class ExpectedItem:
         return cls(**kwargs)
 
 
-class ReadOnly(object):
+class ReadOnly:
     __flag_attr_writable = '_read_only_config_is_writable'
 
     def __init__(self, params=None, freeze=False):

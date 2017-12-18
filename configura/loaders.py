@@ -8,7 +8,7 @@ from configura import ConfigItemRequiredException, ConfigItemValidationException
 from configura.factory import ReadOnly
 
 
-class ValuesLoader(object):
+class ValuesLoader:
     def __init__(self, source):
         self.source = self.parse_source(source)
 

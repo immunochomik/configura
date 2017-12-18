@@ -83,7 +83,7 @@ class ConfiguratorTestCase(TestCase):
         self.assertEqual(str(cont.exception), "Config value for item 'two' is not valid")
 
         with self.assertRaises(ConfigItemValidationException) as cont:
-            cfg = self.make_cfg(
+            _ = self.make_cfg(
                 values={'one': [1, 2, 3]},
                 expected={'one': (int, True)})
         self.assertEqual(str(cont.exception), "Config value for item 'one' is not valid")
@@ -155,7 +155,7 @@ class ConfiguratorTestCase(TestCase):
 
     def test_required_not_in_source_raises(self):
         with self.assertRaises(ConfigItemRequiredException) as cont:
-            cfg = self.make_cfg(
+            _ = self.make_cfg(
                 values={},
                 expected={
                     'one': (int, False, 4),
@@ -227,7 +227,7 @@ class ConfiguratorTestCase(TestCase):
 
     def test_validate_function_check_raises(self):
         with self.assertRaises(ConfigItemValidationException) as cont:
-            cfg = self.make_cfg(
+            _ = self.make_cfg(
                 values={
                     'nest': {
                         'def2': '256.254.10.170'
