@@ -50,9 +50,9 @@ class ExpectedItemTestCase(TestCase):
             ExpectedItem(validate=str, default=1)
 
         with self.assertRaises(TypeError):
-            ExpectedItem.from_tuple((int, 'abd'))
+            ExpectedItem.create([int, 'abd'])
 
-        item = ExpectedItem.from_tuple((str, 'abd'))
+        item = ExpectedItem.create([str, 'abd'])
         self.assertEqual('abd', item.default)
         self.assertFalse(item.required)
 
@@ -74,17 +74,17 @@ class ConfiguratorTestCase(TestCase):
                     },
                 },
                 expected={
-                    'one': (int,),
-                    'not': (int, 1),
+                    'one': [int],
+                    'not': [int, 1],
                     'nest1': {
-                        'two': (float, 1.5),
+                        'two': [float, 1.5],
                     }})
         self.assertEqual(str(cont.exception), "Config value for item 'two' is not valid")
 
         with self.assertRaises(ConfigItemValidationException) as cont:
             _ = self.make_cfg(
                 values={'one': [1, 2, 3]},
-                expected={'one': (int,)})
+                expected={'one': [int]})
         self.assertEqual(str(cont.exception), "Config value for item 'one' is not valid")
 
     def test_load_valid_check_values(self):
@@ -101,14 +101,14 @@ class ConfiguratorTestCase(TestCase):
                 },
             },
             expected={
-                'one': (int,),
-                'not': (int, 1),
+                'one': [int],
+                'not': [int, 1],
                 'nest1': {
-                    'two': (float, 1.5),
-                    'three': (float,),
+                    'two': [float, 1.5],
+                    'three': [float],
                     'nest2': {
                         'nest3': {
-                            'five': (str,)
+                            'five': [str]
                         }
                     }
                 }})
@@ -130,9 +130,9 @@ class ConfiguratorTestCase(TestCase):
                 }
             },
             expected={
-                'one': (int, 4),
+                'one': [int, 4],
                 'nest': {
-                    'def2': (ip4, '0.0.0.0')
+                    'def2': [ip4, '0.0.0.0']
                 }
 
             })
@@ -143,9 +143,9 @@ class ConfiguratorTestCase(TestCase):
         cfg = self.make_cfg(
             values={},
             expected={
-                'one': (int, 4),
+                'one': [int, 4],
                 'nest': {
-                    'def2': (ip4, '0.0.0.0')
+                    'def2': [ip4, '0.0.0.0']
                 }
 
             })
@@ -157,9 +157,9 @@ class ConfiguratorTestCase(TestCase):
             _ = self.make_cfg(
                 values={},
                 expected={
-                    'one': (int, 4),
+                    'one': [int, 4],
                     'nest': {
-                        'def2': (ip4,)
+                        'def2': [ip4]
                     }
 
                 })
@@ -174,9 +174,9 @@ class ConfiguratorTestCase(TestCase):
                 }
             },
             expected={
-                'one': (int, 4),
+                'one': [int, 4],
                 'nest': {
-                    'def2': (ip4,)
+                    'def2': [ip4]
                 }
 
             })
@@ -195,9 +195,9 @@ class ConfiguratorTestCase(TestCase):
                 }
             },
             expected={
-                'one': (int, 4),
+                'one': [int, 4],
                 'nest': {
-                    'def2': (ip4,)
+                    'def2': [ip4]
                 }
 
             })
@@ -210,9 +210,9 @@ class ConfiguratorTestCase(TestCase):
         cfg = self.make_cfg(
             values={},
             expected={
-                'one': (int, 4),
+                'one': [int, 4],
                 'nest': {
-                    'def2': (ip4, '0.0.0.0')
+                    'def2': [ip4, '0.0.0.0']
                 }
 
             })
@@ -234,7 +234,7 @@ class ConfiguratorTestCase(TestCase):
                 },
                 expected={
                     'nest': {
-                        'def2': (ip4, '0.0.0.0')
+                        'def2': [ip4, '0.0.0.0']
                     }
 
                 })
@@ -273,12 +273,12 @@ class YamlValuesConfigTestCase(TestCase):
 
     def test_load_valid_check_values(self):
         cfg = self.make_cfg({
-            'one': (int,),
+            'one': [int],
             'nest': {
-                'def2': (ip4, '0.0.0.0')
+                'def2': [ip4, '0.0.0.0']
             },
             'web': {
-                'port': (int,)
+                'port': [int]
             }
         })
         self.assertEqual(cfg.one, 1)
@@ -287,17 +287,17 @@ class YamlValuesConfigTestCase(TestCase):
 
     def test_load_valid_check_defaults(self):
         cfg = self.make_cfg({
-            'one': (int,),
+            'one': [int],
             'nest': {
-                'def2': (ip4, '0.0.0.0')
+                'def2': [ip4, '0.0.0.0']
             },
             'web': {
-                'port': (int,)
+                'port': [int]
             },
             'database': {
-                'port': (int, 5432),
-                'pwd': (str, 'foo'),
-                'user': (str, 'amp')
+                'port': [int, 5432],
+                'pwd': [str, 'foo'],
+                'user': [str, 'amp']
             }
         })
         self.assertEqual(cfg.one, 1)
@@ -311,23 +311,23 @@ class YamlValuesConfigTestCase(TestCase):
         os.remove(self.path)
         with self.assertRaises(AssertionError):
             _ = self.make_cfg({
-                'one': (int,),
+                'one': [int],
                 'nest': {
-                    'def2': (ip4, '0.0.0.0')
+                    'def2': [ip4, '0.0.0.0']
                 },
                 'web': {
-                    'port': (int,)
+                    'port': [int]
                 }
             })
 
     def test_file_contains_unknown_items_check_ignored(self):
         cfg = self.make_cfg({
-            'one': (int,),
+            'one': [int],
             'nest': {
-                'def2': (ip4, '0.0.0.0')
+                'def2': [ip4, '0.0.0.0']
             },
             'web': {
-                'port': (int,)
+                'port': [int]
             }
         })
         self.assertEqual(cfg.one, 1)
@@ -344,26 +344,26 @@ class ConfiguratorIsRequiredTestCase(TestCase):
     def setUp(self):
         class DummyFactory(Factory):
             _simple_expected_ = {
-                'one': (int,),
-                'not': (int, 1),
+                'one': [int],
+                'not': [int, 1],
                 'nest1': {
-                    'two': (float, 1.5),
-                    'three': (float,),
+                    'two': [float, 1.5],
+                    'three': [float],
                     'nest2': {
-                        'four': (int,),
+                        'four': [int],
                         'nest3': {
-                            'five': (str,)
+                            'five': [str]
                         }
                     }
                 },
 
                 'nest_not_required': {
-                    'two': (float, 2.718),
-                    'three': (float, 3.14),
+                    'two': [float, 2.718],
+                    'three': [float, 3.14],
                     'nest2': {
-                        'four': (int, 4),
+                        'four': [int, 4],
                         'nest3': {
-                            'five': (str, '5')
+                            'five': [str, '5']
                         }
                     }
                 }

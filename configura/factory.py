@@ -1,4 +1,6 @@
 
+import collections
+
 __all__ = [
     'Factory',
     'ExpectedItem',
@@ -36,7 +38,7 @@ class ExpectedItem:
         return self.default is None
 
     @classmethod
-    def from_tuple(cls, item):
+    def create(cls, item):
         kwargs = dict(validate=item[0])
         if item[1:2]:
             kwargs['default'] = item[1]
@@ -70,8 +72,8 @@ class FactoryMeta(type):
         def create(expected):
             root = {}
             for key, description in expected.items():
-                if isinstance(description, tuple):
-                    root[key] = ExpectedItem.from_tuple(description)
+                if isinstance(description, collections.Sequence):
+                    root[key] = ExpectedItem.create(description)
                 elif isinstance(description, dict):
                     root[key] = create(description)
                 else:
