@@ -28,16 +28,16 @@ class ExampleFactory(Factory):
 
     _simple_expected_ = {
         'database': {
-            'port': (int, False, 5432),
-            'host': (ip4, False, '0.0.0.0'),
-            'user': (str, True),
-            'pwd': (str, True),
+            'port': (int, 5432),
+            'host': (ip4, '0.0.0.0'),
+            'user': (str,),
+            'pwd': (str,),
         },
         'webserver': {
-            'port': (int, False, 5001)
+            'port': (int, 5001)
         },
         'workers': {
-            'concurrency': (int, True)
+            'concurrency': (int, 1)
         }
     }
 

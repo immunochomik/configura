@@ -12,35 +12,34 @@ class empty:
 
 
 class ExpectedItem:
-    __slots__ = ('default', 'required', '_validator')
+    __slots__ = ('default', '_validator')
 
-    def __init__(self, validate, required=False, default=None):
+    def __init__(self, validate, default=None):
         if type(validate) == type:
             self._validator = lambda val: isinstance(val, validate)
         elif callable(validate):
             self._validator = validate
         else:
             raise TypeError('validate has to be a type (int, float) or function')
-        if required and default is not None:
-            raise TypeError('Default does not apply for required field')
 
         if default is not None:
             if not self.validate(default):
                 raise TypeError('Default does not pass validation')
 
         self.default = default
-        self.required = required
 
     def validate(self, val):
         return self._validator(val)
+
+    @property
+    def required(self):
+        return self.default is None
 
     @classmethod
     def from_tuple(cls, item):
         kwargs = dict(validate=item[0])
         if item[1:2]:
-            kwargs['required'] = item[1]
-        if item[2:3]:
-            kwargs['default'] = item[2]
+            kwargs['default'] = item[1]
         return cls(**kwargs)
 
 
@@ -76,7 +75,7 @@ class FactoryMeta(type):
                 elif isinstance(description, dict):
                     root[key] = create(description)
                 else:
-                    raise TypeError("Value of expected key '{}' has to be of type dict or ConfigItem".format(key))
+                    raise TypeError("Value of expected key '{}' has to be of type dict or ExpectedItem".format(key))
             return root
 
         setattr(cls, '_expected', create(getattr(cls, '_simple_expected_', {})))
